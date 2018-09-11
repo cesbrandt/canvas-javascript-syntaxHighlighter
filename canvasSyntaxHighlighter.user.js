@@ -6,6 +6,7 @@
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/login.*$/
 // @exclude       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/api\/v1.*$/
+// @require       https://code.jquery.com/jquery-1.7.2.min.js
 // @version       1.0
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
@@ -103,7 +104,7 @@ var SH = extend(function() {
 		switch(subview) {
 			case 'assignments':
 			case 'discussion_topics':
-				switchClass = 'rte_switch_views_link';
+				switchClass = subviewID == 'syllabus' ? 'toggle_views_link' : 'rte_switch_views_link';
 				break;
 			case 'pages':
 				switchClass = 'switch_views';
