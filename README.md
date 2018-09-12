@@ -8,6 +8,10 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+09/12/2018
+- Added basic logic to prevent exeuction in frames
+- Combined the STYLE appends into a single one
+
 09/11/2018
 - Initial Load
 
