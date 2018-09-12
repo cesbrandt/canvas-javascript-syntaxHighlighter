@@ -6,8 +6,7 @@
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/login.*$/
 // @exclude       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/api\/v1.*$/
-// @require       https://code.jquery.com/jquery-1.7.2.min.js
-// @version       1.0
+// @version       1.1
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
 
@@ -46,6 +45,13 @@ var opts = {
 	"comma_first": false,
 	"e4x": false
 };
+
+/**
+ * Don't run in frames
+ */
+if(window.top !== window.self) {
+	return;
+}
 
 /**
  * Variable setup
@@ -90,7 +96,7 @@ var SH = extend(function() {
 			$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify.min.js', function(data, status, xhr) {
 				$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-html.min.js', function(data, status, xhr) {
 					$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-css.min.js', function(data, status, xhr) {
-						$('head').append($('<style />').text('#' + SH.cookieName + ' { width: 100%; height: 280px; }'));
+						$('head').append($('<style />').text('#' + SH.cookieName + ' { width: 100%; height: 280px; } #syntaxHighlighterToggle { display: inline !important; }'));
 						if(SH.enabled && $(SH.rceEditor).is(':hidden')) {
 							SH.initAce();
 						}
@@ -130,7 +136,6 @@ var SH = extend(function() {
 		});
 
 		// Add to Editor Toggle Bar
-		$('head').append($('<style />').html('#syntaxHighlighterToggle { display: inline !important; }'));
 		$('.' + switchClass).last().after(' | ', $('<a />').attr({id: 'syntaxHighlighterToggle'}).css({cursor: 'pointer'}).html((SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName).click(function(e) {
 			e.preventDefault();
 			SH.enabled = SH.enabled ? false : true;
