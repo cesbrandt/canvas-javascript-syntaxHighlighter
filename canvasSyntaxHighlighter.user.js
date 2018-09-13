@@ -2,11 +2,8 @@
 // @name          Canvas Syntax Highlighter
 // @description   "Replaces" the "HTML Editor" with the Ace Syntax Highlighter (https://ace.c9.io/)
 // @include       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/.*$/
-// @exclude       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/((courses|users)\/\d+\/)?files.*$/
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
-// @exclude       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/login.*$/
-// @exclude       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/api\/v1.*$/
-// @version       1.1
+// @version       1.2
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
 
@@ -217,5 +214,7 @@ function setCookie(name, value, expire) {
 }
 
 (function() {
-	SH();
+	if($.inArray(view, ['login', 'api']) === -1 && (($.inArray(view, ['courses', 'users']) > -1 && subview != 'files') || (view == 'accounts' && subview != 'settings'))) {
+		SH();
+	}
 })();
