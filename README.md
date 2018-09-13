@@ -8,6 +8,10 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+09/13/2018
+- Replaced most @excludes with logic within the script to test the location
+- Added `/accounts/:id/settings` to the "do not run on" list due to the syntax highlighter not being able to properly load on the global announcements
+
 09/12/2018
 - Added basic logic to prevent exeuction in frames
 - Combined the STYLE appends into a single one
