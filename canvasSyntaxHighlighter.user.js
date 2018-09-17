@@ -3,7 +3,7 @@
 // @description   "Replaces" the "HTML Editor" with the Ace Syntax Highlighter (https://ace.c9.io/)
 // @include       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
-// @version       1.3
+// @version       1.4
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
 
@@ -13,8 +13,8 @@
 var editorLinksText = ['HTML Editor', 'Rich Content Editor'];   // These are the text of the Canvas editor links immediately above the editors. Replace only if your Canvas does not display in English.
 var toggleState = ['Disable', 'Enable'];                        // These are the prefixes to the toggle anchor. Update them for your personal langauge configuration preference.
 var toggleName = 'Syntax Highlighter';                          // This is the text for the toggle. Update it for your personal language preference.
-var editorWidth = '900px';    // If left blank, will default to 100%
-var editorHeight = '720px';   // If left blank, will default to 280px
+var editorWidth = '';    // If left blank, will default to 100%
+var editorHeight = '';   // If left blank, will default to 280px
 var opts = {
 	"indent_char": "\t",        // What character should be used to indent with (\t - tab; \s - space)
 	"indent_size": "1",         // How many times should that indentation character be used per level
@@ -155,6 +155,7 @@ var SH = extend(function() {
 
 			// Auto-Indent
 			$(SH.htmlEditor).addClass('hide');
+			$('#editor_tabs').addClass('hide');
 			var source = $(SH.htmlEditor).val();
 			$('#' + SH.cookieName).text(html_beautify(source, opts));
 
@@ -177,6 +178,7 @@ var SH = extend(function() {
 	endAce: function() {
 		$('#' + SH.cookieName).remove();
 		$(SH.htmlEditor).removeClass('hide');
+		$('#editor_tabs').removeClass('hide');
 	}
 });
 
