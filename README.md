@@ -9,7 +9,7 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 
 #### Changelog
 09/17/2018
-- Added **width** and **height** options to the configruable variables
+- Added **width** and **height** options to the configurable variables
 
 09/13/2018
 - Replaced most @excludes with logic within the script to test the location
