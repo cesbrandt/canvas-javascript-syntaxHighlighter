@@ -10,6 +10,7 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 #### Changelog
 09/17/2018
 - Added **width** and **height** options to the configurable variables
+- Added code to remove the `#editor_tabs` element when the editor is active to prevent odd behaviour when trying to use it to insert content
 
 09/13/2018
 - Replaced most @excludes with logic within the script to test the location
