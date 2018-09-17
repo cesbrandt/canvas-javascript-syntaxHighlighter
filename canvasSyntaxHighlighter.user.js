@@ -13,6 +13,8 @@
 var editorLinksText = ['HTML Editor', 'Rich Content Editor'];   // These are the text of the Canvas editor links immediately above the editors. Replace only if your Canvas does not display in English.
 var toggleState = ['Disable', 'Enable'];                        // These are the prefixes to the toggle anchor. Update them for your personal langauge configuration preference.
 var toggleName = 'Syntax Highlighter';                          // This is the text for the toggle. Update it for your personal language preference.
+var editorWidth = '900px';    // If left blank, will default to 100%
+var editorHeight = '720px';   // If left blank, will default to 280px
 var opts = {
 	"indent_char": "\t",        // What character should be used to indent with (\t - tab; \s - space)
 	"indent_size": "1",         // How many times should that indentation character be used per level
@@ -93,7 +95,7 @@ var SH = extend(function() {
 			$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify.min.js', function(data, status, xhr) {
 				$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-html.min.js', function(data, status, xhr) {
 					$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-css.min.js', function(data, status, xhr) {
-						$('head').append($('<style />').text('#' + SH.cookieName + ' { width: 100%; height: 280px; } #syntaxHighlighterToggle { display: inline !important; }'));
+						$('head').append($('<style />').text('#' + SH.cookieName + ' { width: ' + (typeof editorWidth !== 'undefined' && editorWidth !== '' ? editorWidth : '100%') + '; height: ' + (typeof editorHeight !== 'undefined' && editorHeight !== '' ? editorHeight : '280px') + '; z-index: 100; } #syntaxHighlighterToggle { display: inline !important; }'));
 						if(SH.enabled && $(SH.rceEditor).is(':hidden')) {
 							SH.initAce();
 						}
