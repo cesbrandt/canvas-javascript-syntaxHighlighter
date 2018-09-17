@@ -40,3 +40,8 @@ There are a few settings that can be adjusted, located at the top of the script:
 - **editorLinksText**: Adjust these values to reflect the text displayed in the Canvas editor toggle anchors in your Canvas' language
 - **toggleState**: These are the prefix values for the **Syntax Highlighter** toggle, depending on the enabled state
 - **toggleName**: Don't want to call it "Syntax Highlighter?" Don't! Call it "Ace Editor!" Call it "Bob!" Okay, maybe not "Bob," but you get the point.
+- **editorWidth**: Adjusts the width of the editor (**Default**: 100%)
+- **editorHeight**: Adjusts the height of the editor (**Default**: 280px)
+- **opts.indent_char**: Defines the character to be used for indenting lines
+- **opts.indent_size**: Defines how many times the **opts.indent_char** should be used per each indentation level
+- **opts.wrap_line_length**: Defines at what character count a line should soft wrap to a new line
