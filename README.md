@@ -8,6 +8,9 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+10/03/2018
+- Updated detection of the editor for the **Syllabus** page to work with having the **Syllabus** set as the **Course Homepage**
+
 09/17/2018
 - Added **width** and **height** options to the configurable variables
 - Added code to remove the `#editor_tabs` element when the editor is active to prevent odd behaviour when trying to use it to insert content
