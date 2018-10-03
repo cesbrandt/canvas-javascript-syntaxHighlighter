@@ -109,6 +109,7 @@ var SH = extend(function() {
 		switch(subview) {
 			case 'assignments':
 			case 'discussion_topics':
+			case null:
 				switchClass = $('#course_syllabus').length > 0 ? 'toggle_views_link' : 'rte_switch_views_link';
 				break;
 			case 'pages':
