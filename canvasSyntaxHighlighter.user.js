@@ -3,7 +3,7 @@
 // @description   "Replaces" the "HTML Editor" with the Ace Syntax Highlighter (https://ace.c9.io/)
 // @include       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
-// @version       1.4
+// @version       1.5
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
 
@@ -109,7 +109,7 @@ var SH = extend(function() {
 		switch(subview) {
 			case 'assignments':
 			case 'discussion_topics':
-				switchClass = subviewID == 'syllabus' ? 'toggle_views_link' : 'rte_switch_views_link';
+				switchClass = $('#course_syllabus').length > 0 ? 'toggle_views_link' : 'rte_switch_views_link';
 				break;
 			case 'pages':
 				switchClass = 'switch_views';
