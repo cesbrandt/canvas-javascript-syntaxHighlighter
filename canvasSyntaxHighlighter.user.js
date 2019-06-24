@@ -3,7 +3,7 @@
 // @description   "Replaces" the "HTML Editor" with the Ace Syntax Highlighter (https://ace.c9.io/)
 // @include       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
-// @version       1.5
+// @version       1.6
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
 
@@ -119,34 +119,44 @@ var SH = extend(function() {
 				switchClass = 'toggle_description_views_link';
 				break;
 		}
-		$('.' + switchClass).each(function() {
-			if(new RegExp(editorLinksText[0]).test($(this).text())) {
-				$(this).on('click', function() {
-					if(SH.enabled) {
-						SH.initAce();
+		var i = 0;
+		var wait = setInterval(function() {
+			if($('.' + switchClass).length > 0) {
+				$('.' + switchClass).each(function() {
+					if(new RegExp(editorLinksText[0]).test($(this).text())) {
+						$(this).on('click', function() {
+							if(SH.enabled) {
+								SH.initAce();
+							}
+						});
+					} else if(new RegExp(editorLinksText[1]).test($(this).text())) {
+						$(this).on('click', function() {
+							if(SH.enabled) {
+								SH.endAce();
+							}
+						});
 					}
 				});
-			} else if(new RegExp(editorLinksText[1]).test($(this).text())) {
-				$(this).on('click', function() {
-					if(SH.enabled) {
+
+				// Add to Editor Toggle Bar
+				$('.' + switchClass).last().after(' | ', $('<a />').attr({id: 'syntaxHighlighterToggle'}).css({cursor: 'pointer'}).html((SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName).click(function(e) {
+					e.preventDefault();
+					SH.enabled = SH.enabled ? false : true;
+					setCookie(SH.cookieName, SH.enabled);
+					$(this).html((SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName);
+					if(SH.enabled && $(SH.rceEditor).is(':hidden')) {
+						SH.initAce();
+					} else {
 						SH.endAce();
 					}
-				});
+				}));
+				clearInterval(wait);
+			} else if(i >= 30) {
+				console.log('Unable to identify switch links to load ' + toggleName);
+				clearInterval(wait);
 			}
-		});
-
-		// Add to Editor Toggle Bar
-		$('.' + switchClass).last().after(' | ', $('<a />').attr({id: 'syntaxHighlighterToggle'}).css({cursor: 'pointer'}).html((SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName).click(function(e) {
-			e.preventDefault();
-			SH.enabled = SH.enabled ? false : true;
-			setCookie(SH.cookieName, SH.enabled);
-			$(this).html((SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName);
-			if(SH.enabled && $(SH.rceEditor).is(':hidden')) {
-				SH.initAce();
-			} else {
-				SH.endAce();
-			}
-		}));
+			i++;
+		}, 500);
 		return;
 	},
 	initAce: function() {
