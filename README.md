@@ -8,6 +8,9 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+06/24/2019
+- Wrapped the **switch** detection in a `setInterval` loop executing every .5 seconds for upto 15 seconds to give it the opportunity to load even if it can't initially identify the **switch** anchors
+
 10/03/2018
 - Updated detection of the editor for the **Syllabus** page to work with having the **Syllabus** set as the **Course Homepage**
 
