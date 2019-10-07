@@ -41,10 +41,12 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 #### How-To Use
 1. Load the userscript to your Userscript Manager of choice
 2. Enable the userscript
-3a. If you're using the "old" RCE, access the "HTML Editor" of an activity edit page
-3b. If you're using the "new" RCE, access the "Switch to raw html editor" of an activity edit page
-4a. If you're using the "old" RCE, click the "Enable Syntax Highlighter" anchor right next to the toggle that allowed you to access the HTML Editor
-4b. If you're using the "new" RCE, click the toggle that appears next to the "Switch to rich text editor" button
+3.  
+   1. If you're using the "old" RCE, access the "HTML Editor" of an activity edit page
+   2. If you're using the "new" RCE, access the "Switch to raw html editor" of an activity edit page
+4.  
+   1. If you're using the "old" RCE, click the "Enable Syntax Highlighter" anchor right next to the toggle that allowed you to access the HTML Editor
+   2. If you're using the "new" RCE, click the toggle that appears next to the "Switch to rich text editor" button
 
 #### Adjustable Configuration
 There are a few settings that can be adjusted, located at the top of the script:
