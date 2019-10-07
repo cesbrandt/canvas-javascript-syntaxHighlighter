@@ -5,7 +5,7 @@
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
 // @version       2.0
 // @require       https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
-//// @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
+// @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
 
 /**
