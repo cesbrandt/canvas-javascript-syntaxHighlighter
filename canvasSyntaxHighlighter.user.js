@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name          Canvas Syntax Highlighter (Beta)
+// @name          Canvas Syntax Highlighter
 // @description   "Replaces" the "HTML Editor" with the Ace Syntax Highlighter (https://ace.c9.io/)
 // @include       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
@@ -15,10 +15,11 @@ var editorLinksText = {   // These are the text of the Canvas editor links immed
 	old: ['HTML Editor', 'Rich Content Editor'],
 	new: ['Switch to raw html editor', 'Switch to rich text editor']
 };
+var fontSize = '';                         // This determines the size of the text in the editor, will default to 12px
 var toggleState = ['Disable', 'Enable'];   // These are the prefixes to the toggle anchor. Update them for your personal langauge configuration preference.
 var toggleName = 'Syntax Highlighter';     // This is the text for the toggle. Update it for your personal language preference.
-var editorWidth = 'calc(100% - 24px)';                 // If left blank, will default to 100%
-var editorHeight = '660px';                // If left blank, will default to 280px
+var editorWidth = '';                      // If left blank, will default to 100%
+var editorHeight = '';                     // If left blank, will default to 280px
 var opts = {
 	"indent_char": "\t",               // What character should be used to indent with (\t - tab; \s - space)
 	"indent_size": "1",                // How many times should that indentation character be used per level
@@ -89,7 +90,7 @@ var SH = extend(function(newEditor) {
 			$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify.min.js', function(data, status, xhr) {
 				$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-html.min.js', function(data, status, xhr) {
 					$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-css.min.js', function(data, status, xhr) {
-						$('head').append($('<style />').text('#' + SH.cookieName + ' { width: ' + (typeof editorWidth !== 'undefined' && editorWidth !== '' ? editorWidth : '100%') + '; height: ' + (typeof editorHeight !== 'undefined' && editorHeight !== '' ? editorHeight : '280px') + '; z-index: 100; } #syntaxHighlighterToggle { display: inline !important; }'));
+						$('head').append($('<style />').text('#' + SH.cookieName + ' { width: ' + (typeof editorWidth !== 'undefined' && editorWidth !== '' ? editorWidth : '100%') + '; height: ' + (typeof editorHeight !== 'undefined' && editorHeight !== '' ? editorHeight : '280px') + '; z-index: 100;' + (fontSize !== '' ? ' font-size: ' + fontSize + ';' : '') + ' } #syntaxHighlighterToggle { display: inline !important; }'));
 						if(SH.enabled && $(SH.rceEditor).is(':hidden')) {
 							SH.initAce();
 						}
