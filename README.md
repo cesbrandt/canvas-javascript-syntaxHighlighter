@@ -8,6 +8,9 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+12/19/2019
+- Added **fontSize** option to the configurable variables for setting a size of the text in the editor (default: 12px, defined by generic Ace CSS onload)
+
 10/07/2019
 - Added support for the new RCE (https://community.canvaslms.com/docs/DOC-17764) scheduled to be released to the production instances on 10/19 (https://community.canvaslms.com/docs/DOC-17761#jive_content_id_Rich_Content_Editor)
 
