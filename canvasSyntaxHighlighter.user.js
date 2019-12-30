@@ -3,7 +3,7 @@
 // @description   "Replaces" the "HTML Editor" with the Ace Syntax Highlighter (https://ace.c9.io/)
 // @include       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
-// @version       2.1
+// @version       2.2
 // @require       https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
@@ -87,9 +87,9 @@ var SH = extend(function(newEditor) {
 	init: function() {
 		// Load Ace Editor
 		$.getScript('https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.3/ace.js', function(data, status, xhr) {
-			$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify.min.js', function(data, status, xhr) {
-				$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-html.min.js', function(data, status, xhr) {
-					$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-css.min.js', function(data, status, xhr) {
+			$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.10.2/beautify.min.js', function(data, status, xhr) {
+				$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.10.2/beautify-html.min.js', function(data, status, xhr) {
+					$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.10.2/beautify-css.min.js', function(data, status, xhr) {
 						$('head').append($('<style />').text('#' + SH.cookieName + ' { width: ' + (typeof editorWidth !== 'undefined' && editorWidth !== '' ? editorWidth : '100%') + '; height: ' + (typeof editorHeight !== 'undefined' && editorHeight !== '' ? editorHeight : '280px') + '; z-index: 100;' + (fontSize !== '' ? ' font-size: ' + fontSize + ';' : '') + ' } #syntaxHighlighterToggle { display: inline !important; }'));
 						if(SH.enabled && $(SH.rceEditor).is(':hidden')) {
 							SH.initAce();
