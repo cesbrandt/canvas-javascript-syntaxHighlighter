@@ -1,5 +1,5 @@
 # canvas-javascript-syntaxHighlighter
-This is a userscript designed to replace with Canvas LMS "HTML Editor" with an Ace Editor (https://ace.c9.io/).
+This is a userscript designed to replace with Canvas LMS "HTML Editor" with an Ace Editor (https://ace.c9.io/) and using JS-Beautify (https://beautifier.io/) to format the code.
 
 #### Table of Contents
 - [Changelog](#changelog)
@@ -8,6 +8,9 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+12/30/2019
+- Updated JS-Beautify to v1.10.2
+
 12/19/2019
 - Added **fontSize** option to the configurable variables for setting a size of the text in the editor (default: 12px, defined by generic Ace CSS onload)
 
