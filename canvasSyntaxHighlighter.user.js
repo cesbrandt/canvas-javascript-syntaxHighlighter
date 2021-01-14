@@ -3,7 +3,7 @@
 // @description   "Replaces" the "HTML Editor" with the Ace Syntax Highlighter (https://ace.c9.io/)
 // @include       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
-// @version       2.2
+// @version       2.3
 // @require       https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
@@ -78,18 +78,23 @@ var SH = extend(function(newEditor) {
 	SH.cookieName = server + '_Canvas_syntaxHighlighter';
 	SH.cookie = getCookie(SH.cookieName);
 	SH.editorContainer = newEditor ? '.canvas-rce__skins--root.rce-wrapper' : '.ic-RichContentEditor';
-	SH.rceEditor = SH.editorContainer + ' > .mce-tinymce:first-of-type';
-	SH.htmlEditor = SH.editorContainer + ' > textarea:first-of-type';
+	SH.rceEditor = SH.editorContainer + (newEditor ? ' .tox' : ' > .mce') + '-tinymce:first-of-type';
+	SH.htmlEditor = SH.editorContainer + (newEditor ? '' : ' >') + ' textarea:first-of-type';
+	SH.htmlEditorToggle = SH.editorContainer + ' > [data-testid="RCEStatusBar"] > [role="toolbar"] [data-btn-id="rce-edit-btn"]';
 	SH.enabled = SH.cookie !== '' ? JSON.parse(SH.cookie) : false;
+
+	console.log('SH: Detected RCE v' + SH.tinyMCE);
 
 	return SH.init();
 }, {
 	init: function() {
+		console.log('SH: Initiating');
+
 		// Load Ace Editor
-		$.getScript('https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.3/ace.js', function(data, status, xhr) {
-			$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.10.2/beautify.min.js', function(data, status, xhr) {
-				$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.10.2/beautify-html.min.js', function(data, status, xhr) {
-					$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.10.2/beautify-css.min.js', function(data, status, xhr) {
+		$.getScript('https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js', function(data, status, xhr) {
+			$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.13.4/beautify.min.js', function(data, status, xhr) {
+				$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.13.4/beautify-html.min.js', function(data, status, xhr) {
+					$.getScript('https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.13.4/beautify-css.min.js', function(data, status, xhr) {
 						$('head').append($('<style />').text('#' + SH.cookieName + ' { width: ' + (typeof editorWidth !== 'undefined' && editorWidth !== '' ? editorWidth : '100%') + '; height: ' + (typeof editorHeight !== 'undefined' && editorHeight !== '' ? editorHeight : '280px') + '; z-index: 100;' + (fontSize !== '' ? ' font-size: ' + fontSize + ';' : '') + ' } #syntaxHighlighterToggle { display: inline !important; }'));
 						if(SH.enabled && $(SH.rceEditor).is(':hidden')) {
 							SH.initAce();
@@ -102,7 +107,6 @@ var SH = extend(function(newEditor) {
 		return SH.loadToggle();
 	},
     loadToggle: function() {
-		console.log('Toggle');
         if(SH.tinyMCE === 4) {
             // Update Ace Editor on View Switch
             var switchClass;
@@ -152,45 +156,47 @@ var SH = extend(function(newEditor) {
                     }));
                     clearInterval(wait);
                 } else if(i >= 30) {
-                    console.log('Unable to identify switch links to load ' + toggleName);
+                    console.log('SH: Unable to identify switch links to load ' + toggleName);
                     clearInterval(wait);
                 }
                 i++;
             }, 500);
         } else if(SH.tinyMCE === 5) {
             var toggleEditor = function() {
-                console.log($('#' + SH.toggleID), $('#' + SH.toggleID).parent().parent());
-                if(new RegExp(editorLinksText.new[0]).test($(this).text())) {
+				var toggle = $('<div />').addClass('ic-Form-control').css({display: 'inline-block', margin: 0, verticalAlign: 'middle'}).html('<label class="ic-Super-toggle--ui-switch" for="' + SH.toggleID + '"><span class="screenreader-only">' + (SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName + '</span><input type="checkbox" id="' + SH.toggleID + '" class="ic-Super-toggle__input"' + (SH.enabled ? ' checked="checked"' : '') + '><div class="ic-Super-toggle__container" aria-hidden="true" data-checked="' + SH.toggleID + ': true" data-unchecked="' + SH.toggleID + ': false"><div class="ic-Super-toggle__switch"></div></div></label>');
+				toggle.find('#' + SH.toggleID).on('change', function() {
+					SH.enabled = SH.enabled ? false : true;
+					setCookie(SH.cookieName, SH.enabled);
+					if(SH.enabled) {
+						$(this).parent().find('.screenreader-only').text(toggleState[0] + ' ' + toggleName);
+						SH.initAce();
+					} else {
+						$(this).parent().find('.screenreader-only').text(toggleState[1] + ' ' + toggleName);
+						SH.endAce();
+					}
+				});
+
+				if($(SH.rceEditor).css('display') == 'none') {
+					$('#' + SH.toggleID).parent().parent().remove();
+					SH.endAce();
+				} else {
+					$(SH.htmlEditorToggle).before(toggle);
 					if(SH.enabled) {
 						SH.initAce();
 					}
-                    console.log('Showing toggle');
-                    $('#' + SH.toggleID).parent().parent().show();
-                } else if(new RegExp(editorLinksText.new[1]).test($(this).text())) {
-                    SH.endAce();
-                    console.log('Hiding toggle');
-                    $('#' + SH.toggleID).parent().parent().hide();
-                }
+				}
             };
-            SH.toggleID = toggleName.replace(/\s/g, '') + 'Toggle';
-            var toggle = $('<div />').addClass('ic-Form-control').css({display: 'inline-block', margin: 0, verticalAlign: 'middle'}).html('<label class="ic-Super-toggle--ui-switch" for="' + SH.toggleID + '"><span class="screenreader-only">' + (SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName + '</span><input type="checkbox" id="' + SH.toggleID + '" class="ic-Super-toggle__input"' + (SH.enabled ? ' checked="checked"' : '') + '><div class="ic-Super-toggle__container" aria-hidden="true" data-checked="' + SH.toggleID + ': true" data-unchecked="' + SH.toggleID + ': false"><div class="ic-Super-toggle__switch"></div></div></label>');
-            toggle.find('#' + SH.toggleID).on('change', function() {
-				SH.enabled = SH.enabled ? false : true;
-				setCookie(SH.cookieName, SH.enabled);
-                if(SH.enabled && $(SH.editorContainer + ' > .tox.tox-tinymce').is(':hidden')) {
-                    SH.initAce();
-                } else {
-                    SH.endAce();
-                }
-            });
-            $('button[title="' + editorLinksText.new[$('button[title="' + editorLinksText.new[0] + '"]').length > 0 ? 0 : 1] + '"]').on('click', toggleEditor).after($('button[title="' + editorLinksText.new[0] + '"]').length > 0 ? toggle.hide() : toggle);
+			SH.toggleID = toggleName.replace(/\s/g, '') + 'Toggle';
+            $(SH.htmlEditorToggle).on('click', toggleEditor);
         }
         return;
     },
 	initAce: function() {
+		console.log('SH: Loading Ace');
+
 		setTimeout(function() {
 			// Build Ace Editor
-			$(SH.editorContainer + ' > textarea').after($('<pre />').attr({'id': SH.cookieName}));
+			$(SH.htmlEditor).after($('<pre />').attr({'id': SH.cookieName}));
 
 			// Auto-Indent
 			$(SH.htmlEditor).addClass('hide');
