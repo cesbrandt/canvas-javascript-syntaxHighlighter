@@ -8,6 +8,10 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+01/16/2021
+- Stripped old RCE code
+- Modified element detection to work with the Production instance of the new RCE (henceforth referred to as just "RCE")
+
 01/14/2021
 - Rebuilt new RCE editor toggle to fix broken loading
 - Updated Ace to v1.4.12
