@@ -3,7 +3,7 @@
 // @description   "Replaces" the "HTML Editor" with the Ace Syntax Highlighter (https://ace.c9.io/)
 // @include       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
-// @version       2.3
+// @version       3.0
 // @require       https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
@@ -73,17 +73,14 @@ var terview = (viewID !== null && typeof leveledURL[7] !== 'undefined') ? levele
 /**
  * Syntax Highlighter "class"
  */
-var SH = extend(function(newEditor) {
-    SH.tinyMCE = newEditor ? 5 : 4;
+var SH = extend(function() {
 	SH.cookieName = server + '_Canvas_syntaxHighlighter';
 	SH.cookie = getCookie(SH.cookieName);
-	SH.editorContainer = newEditor ? '.canvas-rce__skins--root.rce-wrapper' : '.ic-RichContentEditor';
-	SH.rceEditor = SH.editorContainer + (newEditor ? ' .tox' : ' > .mce') + '-tinymce:first-of-type';
-	SH.htmlEditor = SH.editorContainer + (newEditor ? '' : ' >') + ' textarea:first-of-type';
-	SH.htmlEditorToggle = SH.editorContainer + ' > [data-testid="RCEStatusBar"] > [role="toolbar"] [data-btn-id="rce-edit-btn"]';
+	SH.editorContainer = '.canvas-rce__skins--root.rce-wrapper';
+	SH.rceEditor = SH.editorContainer + ' .tox-tinymce:first-of-type';
+	SH.htmlEditor = SH.editorContainer + ' textarea:first-of-type';
+	SH.htmlEditorToggle = SH.editorContainer + ' > [data-testid="RCEStatusBar"] > [role="toolbar"] [title="' + editorLinksText.new[0] + '"], ' + SH.editorContainer + ' > [data-testid="RCEStatusBar"] > [role="toolbar"] [title="' + editorLinksText.new[1] + '"]';
 	SH.enabled = SH.cookie !== '' ? JSON.parse(SH.cookie) : false;
-
-	console.log('SH: Detected RCE v' + SH.tinyMCE);
 
 	return SH.init();
 }, {
@@ -106,91 +103,35 @@ var SH = extend(function(newEditor) {
 
 		return SH.loadToggle();
 	},
-    loadToggle: function() {
-        if(SH.tinyMCE === 4) {
-            // Update Ace Editor on View Switch
-            var switchClass;
-            switch(subview) {
-                case 'assignments':
-                case 'discussion_topics':
-                case null:
-                    switchClass = $('#course_syllabus').length > 0 ? 'toggle_views_link' : 'rte_switch_views_link';
-                    break;
-                case 'pages':
-                    switchClass = 'switch_views';
-                    break;
-                case 'quizzes':
-                    switchClass = 'toggle_description_views_link';
-                    break;
-            }
-            var i = 0;
-            var wait = setInterval(function() {
-                if($('.' + switchClass).length > 0) {
-                    $('.' + switchClass).each(function() {
-                        if(new RegExp(editorLinksText.old[0]).test($(this).text())) {
-                            $(this).on('click', function() {
-                                if(SH.enabled) {
-                                    SH.initAce();
-                                }
-                            });
-                        } else if(new RegExp(editorLinksText.old[1]).test($(this).text())) {
-                            $(this).on('click', function() {
-                                if(SH.enabled) {
-                                    SH.endAce();
-                                }
-                            });
-                        }
-                    });
-
-                    // Add to Editor Toggle Bar
-                    $('.' + switchClass).last().after(' | ', $('<a />').attr({id: 'syntaxHighlighterToggle'}).css({cursor: 'pointer'}).html((SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName).click(function(e) {
-                        e.preventDefault();
-                        SH.enabled = SH.enabled ? false : true;
-                        setCookie(SH.cookieName, SH.enabled);
-                        $(this).html((SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName);
-                        if(SH.enabled && $(SH.rceEditor).is(':hidden')) {
-                            SH.initAce();
-                        } else {
-                            SH.endAce();
-                        }
-                    }));
-                    clearInterval(wait);
-                } else if(i >= 30) {
-                    console.log('SH: Unable to identify switch links to load ' + toggleName);
-                    clearInterval(wait);
-                }
-                i++;
-            }, 500);
-        } else if(SH.tinyMCE === 5) {
-            var toggleEditor = function() {
-				var toggle = $('<div />').addClass('ic-Form-control').css({display: 'inline-block', margin: 0, verticalAlign: 'middle'}).html('<label class="ic-Super-toggle--ui-switch" for="' + SH.toggleID + '"><span class="screenreader-only">' + (SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName + '</span><input type="checkbox" id="' + SH.toggleID + '" class="ic-Super-toggle__input"' + (SH.enabled ? ' checked="checked"' : '') + '><div class="ic-Super-toggle__container" aria-hidden="true" data-checked="' + SH.toggleID + ': true" data-unchecked="' + SH.toggleID + ': false"><div class="ic-Super-toggle__switch"></div></div></label>');
-				toggle.find('#' + SH.toggleID).on('change', function() {
-					SH.enabled = SH.enabled ? false : true;
-					setCookie(SH.cookieName, SH.enabled);
-					if(SH.enabled) {
-						$(this).parent().find('.screenreader-only').text(toggleState[0] + ' ' + toggleName);
-						SH.initAce();
-					} else {
-						$(this).parent().find('.screenreader-only').text(toggleState[1] + ' ' + toggleName);
-						SH.endAce();
-					}
-				});
-
-				if($(SH.rceEditor).css('display') == 'none') {
-					$('#' + SH.toggleID).parent().parent().remove();
-					SH.endAce();
+	loadToggle: function() {
+		var toggleEditor = function() {
+			var toggle = $('<div />').addClass('ic-Form-control').css({display: 'inline-block', margin: 0, verticalAlign: 'middle'}).html('<label class="ic-Super-toggle--ui-switch" for="' + SH.toggleID + '"><span class="screenreader-only">' + (SH.enabled ? toggleState[0] : toggleState[1]) + ' ' + toggleName + '</span><input type="checkbox" id="' + SH.toggleID + '" class="ic-Super-toggle__input"' + (SH.enabled ? ' checked="checked"' : '') + '><div class="ic-Super-toggle__container" aria-hidden="true" data-checked="' + SH.toggleID + ': true" data-unchecked="' + SH.toggleID + ': false"><div class="ic-Super-toggle__switch"></div></div></label>');
+			toggle.find('#' + SH.toggleID).on('change', function() {
+				SH.enabled = SH.enabled ? false : true;
+				setCookie(SH.cookieName, SH.enabled);
+				if(SH.enabled) {
+					$(this).parent().find('.screenreader-only').text(toggleState[0] + ' ' + toggleName);
+					SH.initAce();
 				} else {
-					$(SH.htmlEditorToggle).before(toggle);
-					if(SH.enabled) {
-						SH.initAce();
-					}
+					$(this).parent().find('.screenreader-only').text(toggleState[1] + ' ' + toggleName);
+					SH.endAce();
 				}
-            };
-			SH.toggleID = toggleName.replace(/\s/g, '') + 'Toggle';
-            $(SH.htmlEditorToggle).on('click', toggleEditor);
-        }
-        return;
-    },
+			});
+
+			if($(SH.rceEditor).css('display') == 'none') {
+				$('#' + SH.toggleID).parent().parent().remove();
+				SH.endAce();
+			} else {
+				$(SH.htmlEditorToggle).before(toggle);
+				if(SH.enabled) {
+					SH.initAce();
+				}
+			}
+		};
+		SH.toggleID = toggleName.replace(/\s/g, '') + 'Toggle';
+		$(SH.htmlEditorToggle).on('click', toggleEditor);
+		return;
+	},
 	initAce: function() {
 		console.log('SH: Loading Ace');
 
@@ -200,9 +141,6 @@ var SH = extend(function(newEditor) {
 
 			// Auto-Indent
 			$(SH.htmlEditor).addClass('hide');
-			if(SH.tinyMCE === 4) {
-				$('#right-side-wrapper').hide();
-			}
 			var source = $(SH.htmlEditor).val();
 			$('#' + SH.cookieName).text(html_beautify(source, opts));
 
@@ -225,9 +163,6 @@ var SH = extend(function(newEditor) {
 	endAce: function() {
 		$('#' + SH.cookieName).remove();
 		$(SH.htmlEditor).removeClass('hide');
-		if(SH.tinyMCE === 4) {
-			$('#right-side-wrapper').show();
-		}
 	}
 });
 
@@ -295,11 +230,7 @@ window.onload = function() {
 		var i = 0;
 		var wait = setInterval(function() {
 			if(typeof tinyMCE !== "undefined" && tinyMCE.editors.length > 0) {
-				if(tinyMCE.majorVersion == 4) {
-					SH();
-				} else if(tinyMCE.majorVersion == 5) {
-					SH(true);
-				}
+				SH();
 				clearInterval(wait);
 			}
 			if(i++ >= 30) {
