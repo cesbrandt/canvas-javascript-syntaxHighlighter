@@ -47,7 +47,7 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 09/11/2018
 - Initial Load
 
-[Back to Top](#canvas-javascript-syntaxHighlight)
+[Back to Top](#canvas-javascript-syntaxhighlighter)
 
 #### Dependencies
 - Userscript Manager
@@ -55,7 +55,7 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
   - [Tampermonkey (Firefox)](https://addons.mozilla.org/en-us/firefox/addon/tampermonkey/)
   - [Greasemonkey (Firefox)](https://addons.mozilla.org/en-us/firefox/addon/greasemonkey/)
 
-[Back to Top](#canvas-javascript-syntaxHighlight)
+[Back to Top](#canvas-javascript-syntaxhighlighter)
 
 #### How-To Use
 1. Load the userscript to your Userscript Manager of choice
@@ -67,7 +67,7 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
    1. If you're using the "old" RCE, click the "Enable Syntax Highlighter" anchor right next to the toggle that allowed you to access the HTML Editor
    2. If you're using the "new" RCE, click the toggle that appears next to the "Switch to rich text editor" button
 
-[Back to Top](#canvas-javascript-syntaxHighlight)
+[Back to Top](#canvas-javascript-syntaxhighlighter)
 
 #### Adjustable Configuration
 There are a few settings that can be adjusted, located at the top of the script:
@@ -80,4 +80,4 @@ There are a few settings that can be adjusted, located at the top of the script:
 - **opts.indent_size**: Defines how many times the **opts.indent_char** should be used per each indentation level
 - **opts.wrap_line_length**: Defines at what character count a line should soft wrap to a new line
 
-[Back to Top](#canvas-javascript-syntaxHighlight)
+[Back to Top](#canvas-javascript-syntaxhighlighter)
