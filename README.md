@@ -8,6 +8,13 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+01/26/2021
+- Added v1.7, an "honourary" update to the v1 userscript for use with the old RCE
+  - This version uses the latest code for the old RCE extracted from v2.3
+  - Intended for self-hosted instances to be able to use this script without updating their editors
+  - **NOT** supported in any capacity
+  - **NOT** tested and likely requires modification to work with self-hosted instances
+
 01/16/2021
 - Stripped old RCE code
 - Modified element detection to work with the Production instance of the new RCE (henceforth referred to as just "RCE")
