@@ -8,6 +8,11 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+03/09/2022
+- Removed jQuery
+- Updated Ace to v1.4.14
+- Updated JS-Beautify to v1.14.0
+
 01/26/2021
 - Added v1.7, an "honourary" update to the v1 userscript for use with the old RCE
   - This version uses the latest code for the old RCE extracted from v2.3
