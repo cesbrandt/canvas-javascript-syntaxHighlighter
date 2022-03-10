@@ -3,7 +3,7 @@
 // @description   "Replaces" the "HTML Editor" with the Ace Syntax Highlighter (https://ace.c9.io/)
 // @include       /^https?:\/\/[^\.]*\.([^\.]*\.)?instructure\.com\/.*$/
 // @exclude       /^https?:\/\/[^\.]*\.quiz-lti-iad-prod.instructure\.com\/.*$/
-// @version       3.2
+// @version       3.3
 // @updateURL     https://raw.githubusercontent.com/cesbrandt/canvas-javascript-syntaxHighlighter/master/canvasSyntaxHighlighter.user.js
 // ==/UserScript==
 
@@ -235,22 +235,23 @@ let SH = extend(() => {
 					SH.initAce();
 				}
 			}
-
-			var wait = setInterval(() => {
-				if(document.contains(document.querySelector(SH.prettyEditorToggle))) {
-					clearInterval(wait);
-
-					document.querySelector(SH.prettyEditorToggle).addEventListener('click', () => {
-						if(SH.enabled && document.querySelector(SH.prettyEditorToggle).innerText != editorLinksText.raw) {
-							SH.endAce();
-							SH.initAce();
-						}
-					});
-				}
-			}, 250);
 		};
 		SH.toggleID = toggleName.replace(/\s/g, '') + 'Toggle';
 		SH.htmlEditorToggle.addEventListener('click', toggleEditor);
+
+		var wait = setInterval(() => {
+			if(document.contains(document.querySelector(SH.prettyEditorToggle))) {
+				clearInterval(wait);
+
+				document.querySelector(SH.prettyEditorToggle).addEventListener('click', (ele) => {
+					if(SH.enabled && ele.currentTarget.innerText.trim() == editorLinksText.pretty) {
+						SH.initAce();
+					} else if(SH.enabled && ele.currentTarget.innerText.trim() == editorLinksText.raw) {
+						SH.endAce();
+					}
+				});
+			}
+		}, 250);
 
 		return;
 	},
