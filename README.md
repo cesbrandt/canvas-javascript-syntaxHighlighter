@@ -8,6 +8,9 @@ This is a userscript designed to replace with Canvas LMS "HTML Editor" with an A
 - [Adjustable Configuration](#adjustable-configuration)
 
 #### Changelog
+03/10/2022
+- Fixed bug causing the Ace editor to load multiple times when switching from the CodeMirror editor to the Ace editor
+
 03/09/2022
 - Removed jQuery
 - Updated Ace to v1.4.14
